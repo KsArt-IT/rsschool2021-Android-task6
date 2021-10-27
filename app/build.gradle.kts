@@ -1,9 +1,9 @@
 plugins {
     id("com.android.application")
     id("dagger.hilt.android.plugin")
-//    kotlin("plugin.serialization") version "1.5.30"
     kotlin("android")
     kotlin("kapt")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -35,6 +35,10 @@ android {
     buildFeatures {
         viewBinding = true
     }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
 }
 
 kapt {
@@ -54,39 +58,53 @@ dependencies {
     implementation("androidx.fragment:fragment-ktx:1.3.6")
     implementation("androidx.activity:activity-ktx:1.3.1")
     // ViewModel
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0-rc01")
+    val lifecycle_version = "2.4.0-rc01"
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
     // Saved State module for ViewModel
-    implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:2.4.0-rc01")
+//    implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version")
     // Lifecycle KTX
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0-rc01")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version")
     // Navigation
-    implementation("androidx.navigation:navigation-fragment-ktx:2.3.5")
-    implementation("androidx.navigation:navigation-ui-ktx:2.3.5")
+    val navigation_version = "2.3.5"
+    implementation("androidx.navigation:navigation-fragment-ktx:$navigation_version")
+    implementation("androidx.navigation:navigation-ui-ktx:$navigation_version")
     // Coroutines and Flow
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2")
+    val coroutines_version = "1.5.2"
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version")
     // Retrofit
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
+    val retrofit_version = "2.9.0"
+    implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
+    implementation("com.squareup.retrofit2:converter-moshi:$retrofit_version")
     // Okhttp
     implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2")
     // Moshi
-    implementation("com.squareup.moshi:moshi:1.12.0")
-    implementation("com.squareup.moshi:moshi-kotlin:1.12.0")
-    kapt("com.squareup.moshi:moshi-kotlin-codegen:1.12.0")
+    val moshi_version = "1.12.0"
+    implementation("com.squareup.moshi:moshi:$moshi_version")
+    implementation("com.squareup.moshi:moshi-kotlin:$moshi_version")
+    kapt("com.squareup.moshi:moshi-kotlin-codegen:$moshi_version")
     // Dagger Hilt
-    implementation("com.google.dagger:hilt-android:2.39.1")
-    kapt("com.google.dagger:hilt-compiler:2.39.1")
-    // Paging3
-    implementation("androidx.paging:paging-runtime-ktx:3.0.1")
-    // RoomDao
-    implementation("androidx.room:room-runtime:2.3.0")
-    implementation("androidx.room:room-ktx:2.3.0")
-    kapt("androidx.room:room-compiler:2.3.0")
+    val hilt_version = "2.39.1"
+    implementation("com.google.dagger:hilt-android:$hilt_version")
+    kapt("com.google.dagger:hilt-compiler:$hilt_version")
     // RecyclerView
     implementation("androidx.recyclerview:recyclerview:1.2.1")
     // Coil
-    implementation("io.coil-kt:coil:1.4.0")
+//    val coil_version = "1.4.0"
+//    implementation("io.coil-kt:coil-base:$coil_version")
+//    implementation("io.coil-kt:coil:$coil_version")
+    // Glide
+    val glide_version = "4.12.0"
+    implementation("com.github.bumptech.glide:glide:$glide_version")
+    kapt("com.github.bumptech.glide:compiler:$glide_version")
+    // Exoplayer
+    val exoplayer_version = "2.15.1"
+    implementation("com.google.android.exoplayer:exoplayer-core:$exoplayer_version")
+    implementation( "com.google.android.exoplayer:extension-mediasession:$exoplayer_version")
+    implementation("com.google.android.exoplayer:exoplayer-ui:$exoplayer_version")
+    implementation("com.google.android.exoplayer:extension-okhttp:$exoplayer_version")
+    //
+    implementation("androidx.media:media:1.4.3")
 
     // Timber
     implementation("com.jakewharton.timber:timber:5.0.1")

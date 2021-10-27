@@ -1,8 +1,13 @@
 <resources>
     <string name="app_name">MusicApp</string>
+
     <string name="prev_button_text">Prev</string>
     <string name="play_button_text">Play</string>
     <string name="pause_button_text">Pause</string>
     <string name="stop_button_text">Stop</string>
     <string name="next_button_text">Next</string>
+
+    <string name="notification_channel_name">Player controls</string>
+    <string name="notification_channel_description">Shows the currently playing music</string>
+    <string name="service_name">PlayerService</string>
 </resources>

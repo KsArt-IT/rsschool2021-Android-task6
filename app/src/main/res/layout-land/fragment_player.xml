@@ -46,35 +46,78 @@
         app:layout_constraintStart_toEndOf="@id/stopButton"
         app:layout_constraintTop_toTopOf="@id/prevButton" />
 
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="0dp"
+        android:max="100"
+        android:progress="0"
+        android:visibility="visible"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/prevButton" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/playList"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="@id/guideline2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/seekBar"
+        tools:itemCount="3"
+        tools:listitem="@layout/item_play_list"
+        tools:orientation="horizontal" />
+
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@id/guideline2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/songImage"
+        tools:visibility="visible" />
+
     <ImageView
         android:id="@+id/songImage"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:contentDescription="@null"
         android:scaleType="centerCrop"
         app:layout_constraintDimensionRatio="h,16:10"
         app:layout_constraintEnd_toEndOf="@id/guideline2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/prevButton"
+        app:layout_constraintTop_toBottomOf="@id/playList"
         tools:src="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/songName"
+        android:id="@+id/songArtist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/guideline2"
         app:layout_constraintTop_toTopOf="@id/prevButton"
-        app:layout_constraintBottom_toBottomOf="@+id/prevButton"
+        tools:text="@tools:sample/full_names" />
+
+    <TextView
+        android:id="@+id/songTitle"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="@dimen/small_margin"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guideline2"
+        app:layout_constraintTop_toBottomOf="@id/songArtist"
         tools:text="@tools:sample/full_names" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginStart="@dimen/small_margin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/guideline2"
-        android:layout_marginStart="@dimen/small_margin"
-        app:layout_constraintTop_toTopOf="@+id/songImage">
+        app:layout_constraintTop_toTopOf="@+id/playList">
 
         <TextView
             android:id="@+id/songText"
