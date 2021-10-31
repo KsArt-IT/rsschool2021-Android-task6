@@ -27,14 +27,6 @@ class PlayerServiceConnection(
     private val _connectedState = Channel<State<Boolean>>()
     val connectedState = _connectedState.receiveAsFlow()
 
-    /*
-        private val _isConnected = Channel<State<Boolean>>()
-        val isConnected = _isConnected.receiveAsFlow()
-
-        private val _networkError = Channel<State<Boolean>>()
-        val networkError = _networkError.receiveAsFlow()
-
-    */
     private val _playbackState = MutableStateFlow<PlaybackStateCompat?>(null)
     val playbackState = _playbackState.asStateFlow()
 

@@ -6,7 +6,7 @@ import ru.ksart.musicapp.model.service.PlayerForegroundService
 
 class MusicPlayerListener(
     private val musicService: PlayerForegroundService
-): Player.Listener {
+) : Player.Listener {
     override fun onSeekBackIncrementChanged(seekBackIncrementMs: Long) {
         super.onSeekBackIncrementChanged(seekBackIncrementMs)
     }
@@ -21,7 +21,7 @@ class MusicPlayerListener(
 
     override fun onPlaybackStateChanged(playbackState: Int) {
         super.onPlaybackStateChanged(playbackState)
-        when(playbackState) {
+        when (playbackState) {
             ExoPlayer.STATE_ENDED -> Unit //                mediaSessionCallback.onSkipToNext()
             Player.STATE_READY -> musicService.stopForeground(false)
             else -> Unit

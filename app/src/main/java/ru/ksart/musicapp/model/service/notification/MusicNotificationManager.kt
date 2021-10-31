@@ -7,7 +7,7 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
-import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.google.android.exoplayer2.Player
@@ -16,6 +16,7 @@ import ru.ksart.musicapp.R
 
 class MusicNotificationManager(
     private val context: Context,
+    private val glide: RequestManager,
     sessionToken: MediaSessionCompat.Token,
     notificationListener: PlayerNotificationManager.NotificationListener,
     private val newSongCallback: () -> Unit
@@ -28,13 +29,14 @@ class MusicNotificationManager(
         // v.2.15 - public Builder(Context context,int notificationId,String channelId)
         notificationManager = PlayerNotificationManager.Builder(
             context,
-            NotificationChannels.NOTIFICATION_ID,
-            NotificationChannels.PLAY_CHANNEL_ID,
+            NOTIFICATION_ID,
+            PLAY_CHANNEL_ID,
         )
-            .setMediaDescriptionAdapter(DescriptionAdapter(mediaController))
+            .setChannelNameResourceId(R.string.notification_channel_name)
+            .setChannelDescriptionResourceId(R.string.notification_channel_description)
             .setSmallIconResourceId(R.drawable.ic_music_24)
+            .setMediaDescriptionAdapter(DescriptionAdapter(mediaController))
             .setNotificationListener(notificationListener)
-//            .setGroup()
             .build().apply {
                 setMediaSessionToken(sessionToken)
             }
@@ -42,6 +44,10 @@ class MusicNotificationManager(
 
     fun showNotification(player: Player) {
         notificationManager.setPlayer(player)
+    }
+
+    fun removeNotification() {
+        notificationManager.setPlayer(null)
     }
 
     private inner class DescriptionAdapter(
@@ -70,7 +76,7 @@ class MusicNotificationManager(
         ): Bitmap? {
             if (uri != mediaController.metadata.description.iconUri) {
                 uri = mediaController.metadata.description.iconUri
-                Glide.with(context).asBitmap()
+                glide.asBitmap()
                     .load(mediaController.metadata.description.iconUri)
                     .into(object : CustomTarget<Bitmap>() {
                         override fun onResourceReady(
@@ -88,7 +94,10 @@ class MusicNotificationManager(
             }
             return bitmap
         }
-
     }
 
+    companion object {
+        const val NOTIFICATION_ID = 153_123
+        private const val PLAY_CHANNEL_ID = "play_media_content"
+    }
 }

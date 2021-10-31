@@ -37,8 +37,9 @@ class PlayListMusicSourceImpl @Inject constructor(
     }
 
     @NotNull
-    override fun getMediaDescriptionByIndex(index: Int): MediaDescriptionCompat =
-        songs[index].description
+    override fun getMediaDescriptionByIndex(index: Int): MediaDescriptionCompat {
+        return songs[index].description
+    }
 
     override fun getMediaIndex(media: MediaMetadataCompat?) = media?.let { songs.indexOf(it) } ?: -1
 
@@ -116,4 +117,3 @@ class PlayListMusicSourceImpl @Inject constructor(
         }
     }
 }
-

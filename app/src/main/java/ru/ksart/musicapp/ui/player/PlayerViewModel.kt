@@ -30,8 +30,6 @@ class PlayerViewModel @Inject constructor(
     private val _trackList = MutableStateFlow<State<List<Track>>>(State.Loading(null))
     val trackList = _trackList.asStateFlow()
 
-    private var currentPlayingTrack: Track? = null
-
     private val _currentPlayingSongPosition = MutableStateFlow<Pair<Long, Long>>(0L to 0L)
     val currentPlayingSongPosition = _currentPlayingSongPosition.asStateFlow()
 
@@ -43,7 +41,6 @@ class PlayerViewModel @Inject constructor(
     private val isPlayerPrepared get() = playbackState.value?.isPrepared ?: false
 
     private var jobPosition: Job? = null
-    private val UPDATE_PLAYER_POSITION_INTERVAL = 250L
 
     init {
         playerServiceConnection.subscribe(
@@ -66,7 +63,8 @@ class PlayerViewModel @Inject constructor(
                     }
                     _trackList.value = State.Success(items)
                 }
-            })
+            }
+        )
     }
 
     fun skipToNextSong() {
@@ -116,11 +114,14 @@ class PlayerViewModel @Inject constructor(
         jobPosition?.takeIf { it.isActive }?.cancel()
         jobPosition = viewModelScope.launch(Dispatchers.Default) {
             do {
-                _currentPlayingSongPosition.value =
-                    PlayerForegroundService.currentSongDuration to (playbackState.value?.currentPlaybackPosition
-                        ?: 0)
-                Timber.d("PlayerViewModel: position=${_currentPlayingSongPosition.value.second} duration=${_currentPlayingSongPosition.value.first}")
-                delay(UPDATE_PLAYER_POSITION_INTERVAL)
+                _currentPlayingSongPosition.value = PlayerForegroundService.currentSongDuration to (
+                    playbackState.value?.currentPlaybackPosition ?: 0
+                    )
+                Timber.d(
+                    "PlayerViewModel: position=${_currentPlayingSongPosition.value.second}" +
+                        " duration=${_currentPlayingSongPosition.value.first}"
+                )
+                delay(Companion.UPDATE_PLAYER_POSITION_INTERVAL)
             } while (track)
         }
     }
@@ -132,5 +133,9 @@ class PlayerViewModel @Inject constructor(
             PlayerForegroundService.MEDIA_ROOT_ID,
             object : MediaBrowserCompat.SubscriptionCallback() {}
         )
+    }
+
+    companion object {
+        private const val UPDATE_PLAYER_POSITION_INTERVAL = 250L
     }
 }

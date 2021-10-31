@@ -48,5 +48,4 @@ class ServiceModule {
             context.resources.getString(R.string.app_name)
         )
     )
-
 }

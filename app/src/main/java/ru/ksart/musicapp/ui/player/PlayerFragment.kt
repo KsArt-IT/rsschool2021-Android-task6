@@ -13,7 +13,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -24,7 +24,7 @@ import ru.ksart.musicapp.model.data.State
 import ru.ksart.musicapp.model.service.isPlaying
 import ru.ksart.musicapp.ui.player.adapter.PlayListAdapter
 import timber.log.Timber
-
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class PlayerFragment : Fragment(R.layout.fragment_player) {
@@ -40,6 +40,9 @@ class PlayerFragment : Fragment(R.layout.fragment_player) {
 
     private var currentMediaId = ""
 
+    @Inject
+    lateinit var glide: RequestManager
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -50,7 +53,7 @@ class PlayerFragment : Fragment(R.layout.fragment_player) {
 
     private fun initAdapter() {
         binding.playList.run {
-            adapter = PlayListAdapter(viewModel::playOrToggleSong)
+            adapter = PlayListAdapter(glide, viewModel::playOrToggleSong)
             layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
         }
     }
@@ -173,8 +176,7 @@ class PlayerFragment : Fragment(R.layout.fragment_player) {
         if (currentMediaId == mediaId) return
         currentMediaId = mediaId
         binding.run {
-            Glide.with(this@PlayerFragment)
-                .load(bitmapUrl)
+            glide.load(bitmapUrl)
                 .into(songImage)
             songArtist.text = artist
             songTitle.text = title
@@ -201,10 +203,8 @@ class PlayerFragment : Fragment(R.layout.fragment_player) {
     }
 
     private fun setSeekBarPosition(max: Long = -1, position: Long) {
-        Timber.d("PlayerFragment: seekBar max=${max} progress=${position}")
-        binding.run {
-            if (max >= 0) seekBar.max = max.toInt()
-            if (shouldUpdateSeekbar) seekBar.progress = position.toInt()
-        }
+        Timber.d("PlayerFragment: seekBar max=$max progress=$position")
+        if (max >= 0) binding.seekBar.max = max.toInt()
+        if (shouldUpdateSeekbar) binding.seekBar.progress = position.toInt()
     }
 }

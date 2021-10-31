@@ -5,7 +5,7 @@ import android.content.Intent
 import androidx.core.content.ContextCompat
 import com.google.android.exoplayer2.ui.PlayerNotificationManager
 import ru.ksart.musicapp.model.service.PlayerForegroundService
-import ru.ksart.musicapp.model.service.notification.NotificationChannels
+import ru.ksart.musicapp.model.service.notification.MusicNotificationManager
 
 class MusicPlayerNotificationListener(
     private val musicService: PlayerForegroundService
@@ -32,7 +32,7 @@ class MusicPlayerNotificationListener(
                     this,
                     Intent(applicationContext, this::class.java)
                 )
-                startForeground(NotificationChannels.NOTIFICATION_ID, notification)
+                startForeground(MusicNotificationManager.NOTIFICATION_ID, notification)
                 isForegroundService = true
             }
         }

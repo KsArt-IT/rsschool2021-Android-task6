@@ -21,5 +21,4 @@ interface RepositoryModule {
     @ServiceScoped
     @Binds
     fun provideMusicSource(impl: PlayListMusicSourceImpl): MusicSource
-
 }

@@ -8,8 +8,6 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 
 interface MusicSource {
 
-//    val size: Int
-
     suspend fun fetchMediaData()
 
     fun whenReady(action: (Boolean) -> Unit): Boolean

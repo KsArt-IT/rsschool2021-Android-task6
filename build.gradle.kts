@@ -1,7 +1,8 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 val maxSdkVers by extra(31)
 val minSdkVers by extra(23)
-val codeVers by extra(1)
+val codeVers by extra(2)
+val hiltVers by extra("2.40")
 
 buildscript {
     repositories {
@@ -12,7 +13,7 @@ buildscript {
         classpath("com.android.tools.build:gradle:7.0.3")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31")
 
-        classpath("com.google.dagger:hilt-android-gradle-plugin:2.39.1")
+        classpath("com.google.dagger:hilt-android-gradle-plugin:2.40")
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }

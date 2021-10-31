@@ -8,6 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import ru.ksart.musicapp.model.data.Track
 import timber.log.Timber
+import java.io.IOException
 import javax.inject.Inject
 
 class MusicRepositoryImpl @Inject constructor(
@@ -16,13 +17,17 @@ class MusicRepositoryImpl @Inject constructor(
 
     override suspend fun loadTracks(): List<Track> = withContext(Dispatchers.IO) {
         Timber.d("MusicRepositoryImpl: loadTracks")
-        val jsonString = context.resources.assets.open("playlist.json")
-            .bufferedReader()
-            .use {
-                it.readLine()
-            }
-        Timber.d("MusicRepositoryImpl: list jsonString=$jsonString")
-        convertJsonListToTrackInstance(jsonString)
+        try {
+            val jsonString = context.resources.assets.open("playlist.json")
+                .bufferedReader()
+                .use {
+                    it.readText()
+                }
+            Timber.d("MusicRepositoryImpl: list jsonString=$jsonString")
+            convertJsonListToTrackInstance(jsonString)
+        } catch (e: IOException) {
+            emptyList()
+        }
     }
 
     private fun convertJsonListToTrackInstance(jsonString: String): List<Track> {
@@ -35,10 +40,9 @@ class MusicRepositoryImpl @Inject constructor(
             )
             val adapter = moshi.adapter<List<Track>>(movieListType).nonNull()
             adapter.fromJson(jsonString) ?: emptyList()
-        } catch (e: Exception) {
+        } catch (e: IOException) {
             Timber.e(e, "list error")
             emptyList()
         }
     }
-
 }
