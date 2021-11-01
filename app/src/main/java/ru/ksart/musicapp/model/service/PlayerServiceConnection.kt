@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import ru.ksart.musicapp.model.data.State
+import timber.log.Timber
 
 class PlayerServiceConnection(
     context: Context
@@ -72,6 +73,7 @@ class PlayerServiceConnection(
     ) : MediaBrowserCompat.ConnectionCallback() {
 
         override fun onConnected() {
+            Timber.tag("PlayerServiceConnection").d("State.Success: Ok")
             mediaController = MediaControllerCompat(context, mediaBrowser.sessionToken).apply {
                 registerCallback(MediaControllerCallback())
             }
@@ -79,10 +81,13 @@ class PlayerServiceConnection(
         }
 
         override fun onConnectionSuspended() {
+            Timber.tag("PlayerServiceConnection").d("State.Error: The connection was suspended")
             isConnected.value = State.Error("The connection was suspended", false)
         }
 
         override fun onConnectionFailed() {
+            Timber.tag("PlayerServiceConnection")
+                .d("State.Error: Couldn't connect to media browser")
             isConnected.value = State.Error("Couldn't connect to media browser", false)
         }
     }
@@ -99,11 +104,15 @@ class PlayerServiceConnection(
 
         override fun onSessionEvent(event: String?, extras: Bundle?) {
             super.onSessionEvent(event, extras)
+            Timber.tag("PlayerServiceConnection").d("onSessionEvent: $event")
             when (event) {
-                State.NETWORK_ERROR -> networkError.value = State.Error(
-                    "Couldn't connect to the server. Please check your internet connection.",
-                    null
-                )
+                State.NETWORK_ERROR -> {
+                    Timber.tag("PlayerServiceConnection").d("Couldn't connect to the server.")
+                    networkError.value = State.Error(
+                        "Couldn't connect to the server. Please check your internet connection.",
+                        null
+                    )
+                }
             }
         }
 

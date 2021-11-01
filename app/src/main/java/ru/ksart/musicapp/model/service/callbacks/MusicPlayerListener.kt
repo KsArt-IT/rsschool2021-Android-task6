@@ -1,6 +1,8 @@
 package ru.ksart.musicapp.model.service.callbacks
 
+import android.widget.Toast
 import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.PlaybackException
 import com.google.android.exoplayer2.Player
 import ru.ksart.musicapp.model.service.PlayerForegroundService
 
@@ -17,6 +19,14 @@ class MusicPlayerListener(
 
     override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
         super.onPlayWhenReadyChanged(playWhenReady, reason)
+    }
+    override fun onPlayerError(error: PlaybackException) {
+        super.onPlayerError(error)
+        Toast.makeText(
+            musicService,
+            "An unknown error has occurred",
+            Toast.LENGTH_LONG
+        ).show()
     }
 
     override fun onPlaybackStateChanged(playbackState: Int) {
